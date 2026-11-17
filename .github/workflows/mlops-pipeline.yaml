@@ -51,16 +51,17 @@ jobs:
                 aws s3 cp models/churn_model.pkl s3://churn-model-bucket-cicd-ajith/models/churn_model.pkl
                 echo "Model upload to s3 is success"
 
-            - name: update inference.yaml with new S3 path
+            - name: Update inference.yaml with S3 model path
               run: |
-                MODEL_URI="s3://churn-model-bucket-cicd-ajith/models/churn_model.pkl"
-                sed -i "s|storageUri: .*|storageUri: $MODEL_URI|g" k8s/inference.yaml
+               MODEL_URI="s3://churn-model-bucket-cicd-ajith/models/churn_model.pkl"
+               sed -i "s|storageUri: .*|storageUri: $MODEL_URI|g" inference.yaml
+               grep "storageUri:" inference.yaml
 
             - name: Commit updated inference.yaml
               run: |
                 git config --local user.name "actions@github.com"
                 git config --local user.email "GitHub Actions"
-                git add k8s/inference.yaml
+                git add inference.yaml
                 git commit -m "Update model S3 path [skip ci]" || echo "No changes"
                 git push || echo "No changes to push" 
         
