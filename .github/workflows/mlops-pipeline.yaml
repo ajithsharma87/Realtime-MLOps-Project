@@ -2,7 +2,7 @@ name: MLOPs Pipleline
 
 on:
     push:
-        branches: [cicd]
+        branches: [main]
 
 env:
     AWS_REGION: ap-south-1
